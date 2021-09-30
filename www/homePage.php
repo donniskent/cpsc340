@@ -1,20 +1,53 @@
+<?php session_start();
+		session_regenerate_id(true); ?>
+<?php require_once("../config/pdo.php") ?>
+
+
+
+<html> 
+<body> 
+    
+<!--Use session info and php to decide what buttons are getting shown on the page -->
 <?php 
-try
-{
-$pdo = new PDO('mysql:host=localhost;dbname=moviesite', 'movie','Eastern1957');
-$pdo->setAttribute (PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-$pdo->exec ('SET NAMES "utf8"');
+	//if session, signout button and userpage. 
+	
+	if(isset($_SESSION["test"])) { 
+	echo "hello ".
+	$_SESSION["test"] . 
+	"
+	
+	
+<button>
+    <a href=\"logout.php\">Logout </a>
+</button>
+
+
+
+<!--Will sign the user out and reload the homepage-->
+<button>
+    yourpage
+</button>
+";
 }
-catch (PDOException $e)
-{
-echo $e->getMessage ();
-exit ();
+// !session, login and register buttons. 
+else {
+	echo " 
+	<button>
+    <a href=\"login.php\">Sign In</a>
+</button>
+<!--Will sign the user out and reload the homepage-->
+
+
+
+<button>
+    <a href=\"registration.php\">Register</a>
+</button>
+	
+	
+	
+	";
+	
 }
-
-
-
-
-
 
 
 ?>
@@ -22,22 +55,28 @@ exit ();
 
 
 
-<html> 
-<body> 
-    
-<button>
-    <a href="Login.html">Signout</a>
-</button>
-<!--Will sign the user out and reload the homepage-->
 
 
 
-<button>
-    <a href="Registration.html">Your Page</a>
-</button>
+
+
+
+
+
+
+
 <!--Takes the user to their specific user page-->
 
+
+
 <h1 style="text-align: center;">Site name</h1>
+
+
+
+
+
+
+
 
 <form>
     <label for="search-titles">
