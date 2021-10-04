@@ -1,7 +1,11 @@
-
+<?php session_start(); 
+	  session_regenerate_id(true);
+?>
+ 
 <?php require_once("../config/pdo.php") ?>
+
 <?php 
-//if session already exists, redirect to the homepage. 
+//if session[user] already exists, redirect to the homepage. 
 
 $errors = array();
 
@@ -33,8 +37,9 @@ $password = $_POST["pword"];
 if (empty($password)) {
 	array_push($errors, "Must enter a password");
 }
-	
-	else if ($row["password"] != $password){
+	// need to unencrypt pword and compare it to input
+	//password_verify ($password, $row["password"])
+	else if (!password_verify($password, $row["password"])){
 		array_push($errors,"Wrong password");
 	}
 	
@@ -59,13 +64,23 @@ if (empty($errors)) {
 	//continue
 	echo "success";
 	//if succesful, start a session and reroute to the homepage 
+	session_unset();
+	session_destroy();
 	session_start();
 	session_regenerate_id(true);
-	$_SESSION["test"] = $username;
+	$_SESSION["username"] = $username;
 	header('Location: homepage.php');
 }
-
+else {
+	$_SESSION["errors"] = $errors;
+	header('Location: login.php');
+}
 
 
 }
+else {
+	header("Location: homePage.php");
+}
+
+
 ?>

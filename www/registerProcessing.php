@@ -1,3 +1,8 @@
+<?php //start session to pass error messages to the user 
+	session_start();
+	session_regenerate_id(true);
+	
+?>
 <?php require_once("../config/pdo.php") ?>
 <?php
 // error checking section. Creates user if it passes validation
@@ -27,6 +32,10 @@ $email = $_POST['email'];
 $password1 = $_POST['pword1'];
 $password2 = $_POST['pword2'];
 
+// set session variables, to refill the inputs on errors
+$_SESSION["firstname"] = $firstname;
+$_SESSION["lastname"] = $lastname;
+$_SESSION["email"] = $email;
 
 if (empty($username)) {
 	array_push($errors, "Must enter a username");
@@ -63,7 +72,7 @@ else if ($password1 != $password2) {
 	
 	//if row is false, no values exist, so the 
 	if($row == true) {
-		array_push($errors, "Username is taken");
+		array_push($errors, "Username ".$username. " is taken");
 		$username= "";
 	}
 	
@@ -81,6 +90,7 @@ else if ($password1 != $password2) {
 	if($row == true) {
 		array_push($errors, "Email is taken");
 		$email ="";
+		$_SESSION["email"] = $email;
 	}
 
 
@@ -93,6 +103,7 @@ if (count($errors) == 0) {
 			VALUES(:firstname, :lastname, :username,:email,:password)"; 
 	
 	$stmt = $pdo->prepare($sql); 
+	
 	$encryptedPass = password_hash($_POST['pword1'],PASSWORD_BCRYPT);
 	
 	$stmt->bindParam(':firstname',$firstname);
@@ -112,31 +123,12 @@ if (count($errors) == 0) {
 	header('Location: homepage.php');
 
 }
-
-
-
-
-
-
-
-
-
-
-
+else {
+	$_SESSION["errors"] = $errors;
+	header('Location: registration.php');
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}  else {
+	header("Location: homePage.php");
+}
 
 ?>

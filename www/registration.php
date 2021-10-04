@@ -1,18 +1,30 @@
+<?php session_start();
+	  session_regenerate_id(true); 
+	   require_once("../config/loginAuth.php");
+	  
+	  ?>
 <html>
 <body> 
-	
-  <?php require_once('registerProcessing.php') ?>
+	<style> 
+
+.errorMessage {
+	color: red;
+}
+
+
+</style>
+
   
 <h1>  User Registration
      </h1>
-<form method= "POST" action="">
+<form method= "POST" action="registerProcessing.php">
 <label for="fname">First Name:</label>
 <br>
-<input name="fname" value=<?php echo htmlspecialchars($firstname);?>>
+<input name="fname" value=<?php if(isset($_SESSION["firstname"])){echo $_SESSION["firstname"];}?>>
 <br>
 <label for="lname">Last Name:</label>
 <br>
-<input name="lname" value=<?php echo htmlspecialchars($lastname);?>>
+<input name="lname" value=<?php if(isset($_SESSION["lastname"])){echo $_SESSION["lastname"];}?>>
 <br>
 
 <label for="email"> Email</label>
@@ -21,11 +33,11 @@ Check error:
 1. See if the email is already taken by a user in the DB 
 -->
 <br>
-<input name="email" value=<?php echo htmlspecialchars($email);?>>
+<input name="email" value=<?php if(isset($_SESSION["email"])){echo $_SESSION["email"];}?>>
 <br>
 <label for="uname">User Name:</label>
 <br>
-<input type="text" name="uname" value=<?php echo htmlspecialchars($username);?>>
+<input type="text" name="uname">
 <!--Check if the username is already stored in the DB, prompt user if taken -->
 
 <br>
@@ -42,10 +54,15 @@ Check error:
 <br>
 <br>
 <button>Create Account</button>
-<?php
+<?php if (isset($_SESSION["errors"])) {
 echo "<br>";
-foreach ($errors as $error) {
-echo "<br>".$error . "<br>" ;}
+foreach ($_SESSION["errors"] as $error) {
+echo "<br> <div class=\"errorMessage\">".$error . " </div> <br>" ;}
+	
+	session_unset();
+	session_destroy();
+}
+
 ?>
 
 <!--Button will reroute to the home page if succesful

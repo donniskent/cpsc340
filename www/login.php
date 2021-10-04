@@ -1,13 +1,23 @@
-<?php require_once("loginProcessing.php"); ?>
+<?php session_start();
+	  session_regenerate_id(true); 
+	  require_once("../config/loginAuth.php");
+	  ?>
 
 
 <html> 
+<style> 
 
+.errorMessage {
+	color: red;
+}
+
+
+</style>
 
 <body> 
 
 <h1> User Login </h1>
-<form method="Post"> 
+<form method="Post" action="loginProcessing.php"> 
     <label for="username">Username:</label> <br>
     <input type="text" name="username"> 
     <!--Possible errors: 
@@ -27,10 +37,15 @@
     <br> 
     <br>
     <button>Login</button> 
-	<?php
+	<?php if (isset($_SESSION["errors"])) {
 echo "<br>";
-foreach ($errors as $error) {
-echo "<br>".$error . "<br>" ;}
+foreach ($_SESSION["errors"] as $error) {
+echo "<br> <div class=\"errorMessage\">".$error . " </div> <br>" ;}
+	
+	session_unset();
+	session_destroy();
+	}
+
 ?>
     <h3>Dont have an account? Make one <a href="registration.php">here</a> </h3>
 

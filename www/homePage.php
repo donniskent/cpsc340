@@ -11,9 +11,9 @@
 <?php 
 	//if session, signout button and userpage. 
 	
-	if(isset($_SESSION["test"])) { 
+	if(isset($_SESSION["username"])) { 
 	echo "hello ".
-	$_SESSION["test"] . 
+	$_SESSION["username"] . 
 	"
 	
 	
