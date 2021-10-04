@@ -43,13 +43,13 @@ Check error:
 <br>
 <label for="pword1">Password:</label>
 <br>
-<input name="pword1">
+<input type="password" name="pword1">
 <!--Returns an error if the password doesnt conform to standards
      Passoword should have: a capital, a character, a number, etc - talk with customer about this business/app rule -->
 <br>
 <label for="pword2"> Re-enter Password:</label>
 <br>
-<input name="pword2">
+<input type="password" name="pword2">
 <!--Returns an error if the passwords do not match-->
 <br>
 <br>

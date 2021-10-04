@@ -33,7 +33,7 @@
 
     -->
     <br>
-    <input type="text" name="pword">
+    <input type="password" name="pword">
     <br> 
     <br>
     <button>Login</button> 
