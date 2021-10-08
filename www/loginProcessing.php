@@ -24,10 +24,10 @@ $username = $_POST["username"];
 $password = $_POST["pword"];
 	
 	//using pdo, query for the username where username = $username 
-	$sql = "SELECT password FROM Users WHERE username = :test LIMIT 1"; 
+	$sql = "SELECT password,admin FROM Users WHERE username = :user LIMIT 1"; 
 	
 	$stmt = $pdo->prepare($sql); 
-	$stmt->bindParam(':test',$username);
+	$stmt->bindParam(':user',$username);
 	$stmt->execute();
 	
 	$row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -62,15 +62,21 @@ if (empty($password)) {
 
 if (empty($errors)) {
 	//continue
-	echo "success";
+	//methodize 
 	//if succesful, start a session and reroute to the homepage 
 	session_unset();
 	session_destroy();
 	session_start();
 	session_regenerate_id(true);
 	$_SESSION["username"] = $username;
+	if($row["admin"] == 1 ){
+		$_SESSION["admin"] = true; 
+	}
+	
+	
 	header('Location: homepage.php');
 }
+//if errors > 0, pass the errors in the session to the homepage
 else {
 	$_SESSION["errors"] = $errors;
 	header('Location: login.php');
@@ -78,6 +84,7 @@ else {
 
 
 }
+//if not a post method, reroute to the homePage. Keeps people from visiting this page without submitting the form first
 else {
 	header("Location: homePage.php");
 }

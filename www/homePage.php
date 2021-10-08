@@ -12,6 +12,29 @@
 	//if session, signout button and userpage. 
 	
 	if(isset($_SESSION["username"])) { 
+		if(isset($_SESSION["admin"])) {
+		echo "hello ".
+	$_SESSION["username"] . 
+	"
+	
+	
+<button>
+    <a href=\"logout.php\">Logout </a>
+</button>
+
+
+
+<!--Will sign the user out and reload the homepage-->
+<button>
+    <a href=\"admin.php\"> Admin </a>
+</button>
+";
+	}
+	
+	else {
+	
+	
+	
 	echo "hello ".
 	$_SESSION["username"] . 
 	"
@@ -28,7 +51,7 @@
     yourpage
 </button>
 ";
-}
+	}}
 // !session, login and register buttons. 
 else {
 	echo " 
@@ -48,6 +71,7 @@ else {
 	";
 	
 }
+
 
 
 ?>

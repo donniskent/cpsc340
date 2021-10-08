@@ -33,10 +33,13 @@ $password1 = $_POST['pword1'];
 $password2 = $_POST['pword2'];
 
 // set session variables, to refill the inputs on errors
-$_SESSION["firstname"] = $firstname;
-$_SESSION["lastname"] = $lastname;
-$_SESSION["email"] = $email;
+$_SESSION["firstname"] = htmlentities($firstname);
+$_SESSION["lastname"] = htmlentities($lastname);
+$_SESSION["email"] = htmlentities($email);
 
+
+
+//methodize, return errors array 
 if (empty($username)) {
 	array_push($errors, "Must enter a username");
 }
@@ -61,11 +64,12 @@ else if ($password1 != $password2) {
 }
 
 
+	
 	//using pdo, query for the username where username = $username 
-	$sql = "SELECT * FROM Users WHERE username = :test"; 
+	$sql = "SELECT * FROM Users WHERE username = :user"; 
 	
 	$stmt = $pdo->prepare($sql); 
-	$stmt->bindParam(':test',$username);
+	$stmt->bindParam(':user',$username);
 	$stmt->execute();
 	
 	$row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -78,10 +82,10 @@ else if ($password1 != $password2) {
 	
 	
 	//using pdo, query for the username where email = $email 
-	$sql = "SELECT * FROM Users WHERE email = :test"; 
+	$sql = "SELECT * FROM Users WHERE email = :email"; 
 	
 	$stmt = $pdo->prepare($sql); 
-	$stmt->bindParam(':test',$email);
+	$stmt->bindParam(':email',$email);
 	$stmt->execute();
 	
 	$row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -94,10 +98,11 @@ else if ($password1 != $password2) {
 	}
 
 
-
+// if no errors, create the user. 
 if (count($errors) == 0) {
 	
 	// create the user 
+	//methodize this 
 	echo "Creating user  ";
 	$sql = "INSERT INTO Users (firstname,lastname,username,email,password)
 			VALUES(:firstname, :lastname, :username,:email,:password)"; 
@@ -119,15 +124,19 @@ if (count($errors) == 0) {
 	// start a session, reroute to the home page 
 	session_start();
 	session_regenerate_id(true);
-	$_SESSION["test"] = $firstname;
+	$_SESSION["username"] = $firstname;
 	header('Location: homepage.php');
 
 }
+//if errors exist, add the errors array to the session, pass it
+//to registration 
 else {
 	$_SESSION["errors"] = $errors;
 	header('Location: registration.php');
 }
-}  else {
+}  
+// if not a post request, redirect. 
+else {
 	header("Location: homePage.php");
 }
 
