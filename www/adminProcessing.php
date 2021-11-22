@@ -13,15 +13,14 @@
 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-	$title = $_POST["title"];
-	$director = $_POST["director"];
-	$genre = $_POST["genre"];
-	$studio = $_POST["studio"];
-	$year = $_POST["year"];
-	$length = $_POST["length"];
-	$description = $_POST["description"];
-	var_dump($genre);
-	var_dump($studio);
+	$title = htmlentities($_POST["title"]);
+	$director = htmlentities($_POST["director"]);
+	$genre = htmlentities($_POST["genre"]);
+	$studio = htmlentities($_POST["studio"]);
+	$year = htmlentities($_POST["year"]);
+	$length = htmlentities($_POST["length"]);
+	$description = htmlentities($_POST["description"]);
+	
 	
 	$errors = array();
 	
@@ -59,7 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 		
 		
 		
-		
+		if(empty($errors)) {
 		
 		
 		
@@ -81,7 +80,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	
 	
 	$stmt->execute();
-	if(empty($errors)) {
+	
 		
 		if($_FILES["fileUpload"]["error"] == UPLOAD_ERR_OK){
 		$finfo = new finfo(FILEINFO_MIME_TYPE);

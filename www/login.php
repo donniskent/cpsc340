@@ -1,6 +1,7 @@
 <?php session_start();
 	  session_regenerate_id(true); 
 	  require_once("../config/loginAuth.php");
+	  require_once("../config/base.php");
 	  ?>
 
 

@@ -1,80 +1,32 @@
 <?php session_start();
-		session_regenerate_id(true); ?>
-<?php require_once("../config/pdo.php") ?>
+		session_regenerate_id(true);
+		require_once("../config/pdo.php"); 
+		require_once("../config/base.php");
+	?>
 
 
 
 <html> 
+
 <body> 
-    
-<!--Use session info and php to decide what buttons are getting shown on the page -->
-<?php 
-	//if session, signout button and userpage. 
-	
-	if(isset($_SESSION["username"])) { 
-		if(isset($_SESSION["admin"])) {
-		echo "hello ".
-	$_SESSION["username"] . 
-	"
-	
-	
-<button>
-    <a href=\"logout.php\">Logout </a>
-</button>
+<script
+  src="https://code.jquery.com/jquery-3.6.0.min.js"
+  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+  crossorigin="anonymous"></script>
+<script src='homePage.js'> </script>
 
 
 
-<!--Will sign the user out and reload the homepage-->
-<button>
-    <a href=\"admin.php\"> Admin </a>
-</button>
-";
-	}
-	
-	else {
-	
-	
-	
-	echo "hello ".
-	$_SESSION["username"] . 
-	"
-	
-	
-<button>
-    <a href=\"logout.php\">Logout </a>
-</button>
 
-
-
-<!--Will sign the user out and reload the homepage-->
-<button>
-    yourpage
-</button>
-";
-	}}
-// !session, login and register buttons. 
-else {
-	echo " 
-	<button>
-    <a href=\"login.php\">Sign In</a>
-</button>
-<!--Will sign the user out and reload the homepage-->
-
-
-
-<button>
-    <a href=\"registration.php\">Register</a>
-</button>
-	
-	
-	
-	";
-	
+<style>
+.what ul {
+  list-style-type: none;
+ 
 }
 
 
-
-?>
+</style>
+<!--Use session info and php to decide what buttons are getting shown on the page -->
 
 
 
@@ -93,7 +45,7 @@ else {
 
 
 
-<h1 style="text-align: center;">Site name</h1>
+<h1 style="text-align: center;">Movie Rating</h1>
 
 
 
@@ -102,15 +54,17 @@ else {
 
 
 
-<form>
+<form action="movies.php"> 
     <label for="search-titles">
         Search our Titles
     </label>
-    <input name="search-titles">
-    <button name="submit-search-titles">GO!</button>
+    <input name="search">
+    <button>GO!</button>
 </form>
 <!--Loads all the results of the search in the movie lookup page-->
+
 <br> 
+
 <form>
     <label for="search-friends">
         Search for Friends
@@ -121,7 +75,7 @@ else {
 <!--Loads all the results of the search in the user lookup page-->
 
 <br>
-
+<div id="content">
 <form>
     <label for="search-by">
         Search by:
@@ -138,6 +92,7 @@ else {
 </form> 
 <!--Pick a table to query, load results based on input. Accepts all input
 if no match: will be stated on next page-->
+</div>
 
 
 
@@ -146,60 +101,74 @@ if no match: will be stated on next page-->
 
 
 
-
-
-
-<h3>Recently Added</h3>
 <?php 
-$sql = 'SELECT movieTitle, moviePosterFilePath, releaseYear FROM Movies ORDER BY movieID DESC LIMIT 10;';
+	if(!isset($_SESSION["username"])){
+echo "<h3>Recently Added</h3>";
+echo "<div class='what'>";
+
+$sql = 'SELECT movieID, movieTitle, hasPoster, releaseYear FROM Movies ORDER BY movieID DESC LIMIT 10;';
 $stmt = $pdo->prepare ($sql);
 $stmt->execute();
-echo "<ul>"; 
+echo " <ul>"; 
 foreach ($stmt as $row)
 {
 	$year = $row["releaseYear"];
-echo "<li>" . $row['movieTitle']. '('.  $row['releaseYear'] . ")". "</li>" ;
+	$id = $row["movieID"];
+echo "<li> <a href='moviePage.php?id=$id' > " . htmlentities($row['movieTitle']). '('.  htmlentities($row['releaseYear']) . ")". " </a></li> " ;
 }
 
-	echo "</ul>"; 
+	echo "</ul> </div>"; 
+
+	}
+	else {
+		//need the current users friends
+		//need the 10 most recent ratings of the friends 
+		//need the names of each ratings. 
+		
+		
+		$sql = "SELECT * from Ratings, Movies WHERE Movies.movieID = Ratings.movieID AND Ratings.username IN 
+		((SELECT newFriendUserName FROM friendships WHERE instigatorUsername = :user AND accepted =1) UNION (SELECT instigatorUsername FROM friendships WHERE newFriendUserName = :user AND accepted =1)) 
+		ORDER BY Ratings.submitDate DESC LIMIT 5" ;
+
+		$stmt = $pdo->prepare ($sql);
+		$stmt->bindParam(":user", $_SESSION["username"]);
+		
+		$stmt->execute();		
+		
 ?>
-
-
-
-
-
-<div>
-Recent Comments by friends:
-<ul> 
-    <li>
-        Name, Post, activity content (like, comment, rating)
-
-    </li>
-
-
-</ul>
-Recently rated movies by your friends: 
-<ul> 
-    <li>
-        Name, movie, rating 
-
-    </li>
-    <li>
-        Name, movie, rating 
-
-    </li>
-    <li>
-        Name, movie, rating 
-
-    </li>
-
-</ul>
-
+		
+		<div id="ratings">
+<?php		
+		
+		
+	require_once("ratingsReset.php");
+		
+		
+		
+	}
+	?>
 </div>
-<!-- If a user doesnt have any friends yet, these two lists will be empty
-In this case, maybe the area should be populated with top ranked 
-movies, or movies with the most rankings
-something that is universal to friendless accounts. -->
+
+
+
+<div id="comments">
+<?php
+require_once("commentsReset.php");
+?>
+</div>
+
+
+
+
+<div id="friendrequests">
+
+<?php 
+	require_once("friendsReset.php");
+
+?>
+</div>
+
+
 
 
 </body>

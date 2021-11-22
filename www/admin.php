@@ -1,6 +1,7 @@
 <?php 
 session_start();
 require_once("../config/adminAuth.php");
+require_once("../config/base.php");
 
 session_regenerate_id(true);
 //1. authenticate based on admin bool 
@@ -23,7 +24,7 @@ session_regenerate_id(true);
 <body> 
 <h1> Create New Movie </h1>
  
-<form method="Post" action="adminProcessing.php"> 
+<form method="Post"  enctype="multipart/form-data" action="adminProcessing.php"> 
             <label for="title">
                 Title
             </label>
@@ -43,7 +44,7 @@ session_regenerate_id(true);
 		
 		
 		foreach ($stmt as $row){
-		echo "<option value=".$row["directorID"]."> " . $row["directorName"] . " </option>";
+		echo "<option value=".htmlentities($row["directorID"])."> " . htmlentities($row["directorName"]) . " </option>";
 		}
 			
 			?>
@@ -66,7 +67,9 @@ session_regenerate_id(true);
 		
 		
 		foreach ($stmt as $row){
-		echo "<option value=".$row["genreType"]."> " . $row["genreType"] . " </option>";
+		
+		echo "<option value='".htmlentities($row["genreType"])."' > " . htmlentities($row["genreType"]) . " </option>";
+		
 		}
 		
 	
@@ -93,8 +96,10 @@ session_regenerate_id(true);
 		
 		
 		foreach ($stmt as $row){
-		var_dump($row["studioName"]);
-		echo "<option value=".$row["studioName"]." > " . $row["studioName"] . " </option>";
+		
+		echo "<option value='".htmlentities($row["studioName"])."' > " . htmlentities($row["studioName"]) . " </option>";
+		
+		
 		}
 		
 	
@@ -133,19 +138,38 @@ session_regenerate_id(true);
             <br>
             <br>
             
-
-
-            
+			<label for="length">
+                Movie Length
+            <input name="length">
+<br>
+<br>
+			<label for="description">
+			Movie Description:
+			</label>
+			<br>
+			<textarea name="description">
+			
+			</textarea>
+            <br>
+			<br>
            
+		<input type="file" name="fileUpload" "accept=jpg">
+		
+		
+		
+
+			
             
-              
+             
             
             
             
             
             
             <button>Submit</button>
-
+		
+		
+		
         </form>
 <?php 
 

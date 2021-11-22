@@ -9,8 +9,7 @@
 
 $errors = array();
 
-$username = "";
-$password = ""; 
+
 
 
 
@@ -20,17 +19,35 @@ $password = "";
 		//4. If yes, start session and log in
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-$username = $_POST["username"];
-$password = $_POST["pword"];
+$username = htmlentities($_POST["username"]);
+$password = htmlentities($_POST["pword"]);
 	
 	//using pdo, query for the username where username = $username 
-	$sql = "SELECT password,admin FROM Users WHERE username = :user LIMIT 1"; 
+	$sql = "SELECT * FROM Users WHERE username = :user LIMIT 1"; 
 	
 	$stmt = $pdo->prepare($sql); 
 	$stmt->bindParam(':user',$username);
 	$stmt->execute();
 	
 	$row = $stmt->fetch(PDO::FETCH_ASSOC);
+	
+	if($row["failedLoginTime"] != null) {
+	$sql = 'SELECT TIMESTAMPDIFF(SECOND, :time, NOW()) as difference'; 
+	
+	$stmt = $pdo->prepare($sql); 
+	$stmt->bindParam(':time',$row['failedLoginTime']);
+	$stmt->execute();
+	
+	$row2 = $stmt->fetch(PDO::FETCH_ASSOC);
+		
+		if($row2["difference"] < 30) {
+	
+		array_push($errors,"Account locked. Please wait:". (30 - $row2["difference"]) . " seconds.");
+		}
+	}
+	
+	
+	
 	
 	
 	
@@ -40,6 +57,20 @@ if (empty($password)) {
 	// need to unencrypt pword and compare it to input
 	//password_verify ($password, $row["password"])
 	else if (!password_verify($password, $row["password"])){
+		
+		$sql = "UPDATE Users
+				SET failedLoginTime = NOW()
+				WHERE username = :user;";
+		$stmt = $pdo->prepare($sql); 
+		$stmt->bindParam(':user', $username);
+		$stmt->execute();	
+		
+		
+		
+		
+		
+		
+		
 		array_push($errors,"Wrong password");
 	}
 	

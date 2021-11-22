@@ -10,12 +10,7 @@
 
 
 //get all the inputs from the form, store in variables 
-$username = "";
-$firstname = "";
-$lastname = '';
-$email = '';
-$password1 = '';
-$password2 = '';
+
 
 $errors = array(); 
 
@@ -25,12 +20,12 @@ $errors = array();
 
 
 if($_SERVER["REQUEST_METHOD"] == "POST") {
-$username = $_POST['uname'];
-$firstname = $_POST['fname'];
-$lastname = $_POST['lname'];
-$email = $_POST['email'];
-$password1 = $_POST['pword1'];
-$password2 = $_POST['pword2'];
+$username = htmlentities($_POST['uname']);
+$firstname = htmlentities($_POST['fname']);
+$lastname = htmlentities($_POST['lname']);
+$email = htmlentities($_POST['email']);
+$password1 = htmlentities($_POST['pword1']);
+$password2 = htmlentities($_POST['pword2']);
 
 // set session variables, to refill the inputs on errors
 $_SESSION["firstname"] = htmlentities($firstname);
