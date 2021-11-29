@@ -1,4 +1,7 @@
   <?php 
+  	require_once("../config/utilities.php");
+
+  
  if(!isset($_SESSION)) 
     { 
         session_start(); 
@@ -16,7 +19,7 @@ require_once("../config/pdo.php");
 		$stmt->execute();		
 		echo '<ul>';		
 		foreach($stmt as $row) {
-			echo '<li>'. htmlentities($row["username"])." ". htmlentities($row["movieTitle"]). " ". htmlentities($row["commentMessage"]). "</li><br>";
+			echo '<li>'. makeUserLink($row["username"])." ". makeMovieLink($row["movieID"], $row["movieTitle"]). " ". htmlentities($row["commentMessage"]). "</li><br>";
 			
 		}		
 		echo '</ul>';

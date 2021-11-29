@@ -28,9 +28,7 @@ $sql = "SELECT * from Friendships
 			echo '<li>'. htmlentities($row["instigatorUsername"])."<button class='acceptFriend' value=$test > Accept </button> <button class='declineFriend' value=$test> Decline </button></li>";
 		}
 		
-		//jquery 
-		//1. On click of a button, use AJAX to process the FriendRequestForm. 
-		//2. If it works, use AJAX to update the fields relating to the user's friend. 
+		
 		
 		
 	}

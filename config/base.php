@@ -2,7 +2,16 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 
 
+<style>
+a {
+  text-decoration: none;
+  color: black;
+  
+}
 
+
+
+</style>
 
 
 <?php 
@@ -18,7 +27,7 @@ $user= $_SESSION['username'];}?>
 
 
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-light bg-light" style="background-color: white !important">
   <div class="container-fluid">
     <a class="navbar-brand" href="homepage.php">MetaMovie</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,17 +63,19 @@ $user= $_SESSION['username'];}?>
 		</li>
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Dropdown
+            Utilities
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
             <?php 
 			if(isset($_SESSION["username"])){
-				echo '<li><a class="dropdown-item" href=userEdit.php?user='.$user.'>Edit Profile</a></li>';
+				
+				echo ' <li><a class="dropdown-item" href="movies.php">Recommended</a></li>';
 				echo ' <li><hr class="dropdown-divider"></li>';
+				echo '<li><a class="dropdown-item" href=userEdit.php?user='.$user.'>Edit Profile</a></li>';
 				echo ' <li><a class="dropdown-item" href="logout.php">Logout</a></li>';
 			}
 			else {
-				 echo '<li><hr class="dropdown-divider"></li>';
+				
 				echo ' <li><a class="dropdown-item" href="login.php">Login</a></li>';
 				echo ' <li><a class="dropdown-item" href="registration.php">Register</a></li>';
 			}

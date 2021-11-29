@@ -4,6 +4,8 @@ session_start();
 		session_regenerate_id(true);
 		require_once("../config/pdo.php"); 
 		require_once("../config/base.php");
+		require_once("../config/utilities.php");
+		
 
 	/*
 	if($_SESSION["username"] != $_GET["user"]) {
@@ -42,14 +44,35 @@ session_start();
 
 <style>
 	.tester {
-		border-radius: 50%;
+		text-align:center;
+		background-color: white; 
+		border-style: solid; 
+		border-color: grey; 
+		border-radius:2em; 
+		border-width: thin;
 	}
+	body {
+		background-color: #f8f8f8;
+	}
+	.banner {
+		background-color: white;
+		border-style: solid; 
+		border-color: grey; 
+		border-radius:2em; 
+		border-width: thin;
+	}
+	
+	.pic {
+		margin-top: 1em;
+		border-radius: 10em;
+	}
+	
 
 </style>
 
-<div class=container>
+<div class=container >
 
-<div class="row justify-content-center" style="background-color:grey">
+<div class="row justify-content-center banner" >
 	<div class=col-md-6 style=text-align:center>
 		<?php 
 		
@@ -61,13 +84,13 @@ session_start();
 		
 		
 	
-		echo '<img class="tester" src="../images/'.$user.'.jpg?'.$update.'" width="200" height="200">';
+		echo '<img class="pic" src="../images/'.$user.'.jpg?'.$update.'" width="200" height="200">';
 			
 		}
 		
 		
 		else {
-			echo '<img class="tester" src="../images/defaultUser.jpg" width="200" height="200">';
+			echo '<img class="pic" src="../images/defaultUser.jpg" width="200" height="200">';
 		}
 		
 		
@@ -80,8 +103,8 @@ session_start();
 	</div>
 	<div style=text-align:center> <h2> <?php echo $row["firstname"] ." ". $row["lastname"];; ?> </h2> </div>
 </div>
-<div class="row justify-content-center " style="height:20em;">
-	<div class=col-md-4 style="text-align:center;background-color: #E5E5E5; border-radius:2em">
+<div class="row justify-content-center mt-2 " style="height:20em;">
+	<div class="col-md-3 tester">
 		<h3>Friends List</h3>
 		<ul class="list-inline justify-content-center"style="list-style-type:none;">
 	<?php 
@@ -91,7 +114,7 @@ session_start();
 		$stmt->execute();
 	foreach($stmt as $row) {
 		//var_dump($row["newFriendUserName"]);
-		echo '<li>'. htmlentities($row["test"]). '</li>';
+		echo '<li>'. makeUserLink($row["test"]). '</li>';
 	}
 	
 	?>
@@ -100,7 +123,7 @@ session_start();
 	
 	</div>
 	
-	<div class='col-md-4' style="text-align:center;background-color: #E5E5E5; border-radius:2em">
+	<div class='col-md-3 ms-md-5 tester' >
 		<h3>About me:</h3>
 		<ul class="list-inline justify-content-center" style="list-style-type:none;">
 	
@@ -113,7 +136,7 @@ session_start();
 	
 	
 	
-	<div class=col-md-4 style="text-align:center;background-color: #E5E5E5; border-radius:2em;">
+	<div class="col-md-3 ms-md-5 tester">
 		<h3>Recent Comments  </h3>
 		<ul class="list-inline justify-content-center" style="list-style-type:none;">
 	
@@ -124,7 +147,7 @@ session_start();
 		$stmt->execute();
 	foreach($stmt as $row) {
 		//var_dump($row["newFriendUserName"]);
-		echo '<li>'. htmlentities($row["movieTitle"]). " ". htmlentities($row["commentMessage"]).'</li>';
+		echo '<li>'. makeMovieLink($row["movieID"], $row["movieTitle"]). " ". htmlentities($row["commentMessage"]).'</li>';
 	}
 	
 	

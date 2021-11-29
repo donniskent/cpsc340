@@ -3,7 +3,7 @@
 	session_regenerate_id(true);
 	require_once("../config/pdo.php");
 	require_once("../config/base.php");
-
+	require_once("../config/utilities.php");
 //check admin status and logged in status 
 //also, get request for editing the movie 
 //cast added at the admin page 
@@ -145,48 +145,57 @@ $id = $_GET["id"];
 
 		</div>
         <br>
-        <div>Cast</div>
+       
         <br>
 		<div><?php echo $movieDescription?></div>
         <br>
         <div>
 		<?php 
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		$sql = "SELECT * FROM Comments 
 		WHERE movieId = :id ORDER BY submittedDate DESC LIMIT 10;";
-	
 	$stmt = $pdo->prepare($sql); 
 	$stmt->bindParam(':id',$id);
 	$stmt->execute();
 	
-	echo "<div id=comments>";
+	echo "<div id=comments><form method='POST' action='newFriendProcessing.php'>";
 	foreach($stmt as $row) {
 		
 		$userCommentId = $row["username"];
-		$sql = "SELECT username FROM users 
-		WHERE username = :uname;";
-	/*
-	$stmt = $pdo->prepare($sql); 
-	$stmt->bindParam(':uname',$userCommentId);
-	$stmt->execute();
-	$userRow = $stmt->fetch(PDO::FETCH_ASSOC);
-		*/
+		
+		$sql ="SELECT * FROM Friendships 
+			WHERE instigatorUsername = :me1 AND newFriendUserName = :them1
+			UNION SELECT * FROM Friendships WHERE newFriendUserName = :me1 AND instigatorUsername = :them1 ;";
+			$stmt = $pdo->prepare($sql); 
+			$stmt->bindParam(':them1',$row["username"]);
+			$stmt->bindParam(':me1',$_SESSION["username"]);
+			$stmt->execute();
+			$exists = $stmt->fetch(PDO::FETCH_ASSOC);
 		
 		
-		echo $row["username"]. " ";
+	
+	
+	
+		$newFriend = $row["username"];
+		
+		
+		echo makeUserLink($row["username"]). " ";
 		echo "  ". $row["submittedDate"]. " ";
-		if(isset($_SESSION["username"])){
-		echo "<button onclick=like()>Like</button>". " " ;
-		
-		if($row["username"] != $_SESSION["username"]) 
-		{
-			
-			echo "<button type='submit'  value='1' onclick=friend()>Friend</button>". "<br>";
+		if($exists == false && $row["username"] != $_SESSION["username"] ) {
+			$_SESSION["pastID"] = $_GET["id"];
+			echo "<button name='newFriend' value='$newFriend'>friend</button> <br>";
 		}
 		else {
 			echo "<br>";
-		}}
-		
-		
+		}
 		
 		echo "    ". htmlentities($row["commentMessage"]). " <br> " ;
 		
@@ -195,13 +204,9 @@ $id = $_GET["id"];
 	
 	}
 		
-		echo "</div>";
+		echo "</form></div>";
 	
 		
-		//button needs to submit the username of the friend they want to add 
-		//then remove the button using onclick and a remove function. 
-		//on php load, the button should only appear if there isnt a pending friendrequest. 
-		//query the friendships table for 
 		
 		
 		
@@ -256,12 +261,19 @@ $id = $_GET["id"];
 
 <script>
 
-function friend() {
-	alert(this);
-	//go make the friend request, then remove the button 
+function friend(button) {
+	alert(button.value);
+	//go make the friend request, then update the comment section
+	
+
+}
+function acceptFriend(button) {
+	alert(button.value);
+	//UPDATE the friendrequest, then update the comment section
 
 
 }
+
 function like() {
 	alert(2);
 	//go make the friend request, then remove the button 

@@ -1,5 +1,5 @@
 <?php 
- 
+ require_once("../config/utilities.php");
  
  if(!isset($_SESSION)) 
     { 
@@ -19,7 +19,7 @@ require_once("../config/pdo.php");
 		$stmt->execute();		
 		echo "Recent Ratings by your Friends: <br><ul>";		
 		foreach($stmt as $row) {
-			echo '<li>'. htmlentities($row["username"])." ". htmlentities($row["movieTitle"]). " ". htmlentities($row["ratingValue"]). "</li><br>";
+			echo '<li>'. makeUserLink($row["username"]).' '. makeMovieLink($row["movieID"], $row["movieTitle"]). " ". htmlentities($row["ratingValue"]). "</li><br>";
 			
 		}		
 		echo '</ul>';
