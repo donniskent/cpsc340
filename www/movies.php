@@ -7,7 +7,19 @@
 
 //get the post variable, see where
 	
- if(isset($_SESSION["username"])) {
+	
+	//if search is set, look for the searched thing
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+ 
 	if(isset($_GET["search"])){
 		$test = htmlentities($_GET["search"]);
 	
@@ -21,6 +33,7 @@
 	}
 	
 	else {
+		if(isset($_SESSION["username"])){
 		$sql = "SELECT movieTitle, movies.movieID, count(*) as num5s from ratings,movies
 WHERE movies.movieID = ratings.movieID AND ratings.ratingValue = 5 AND ratings.username IN ( (SELECT newFriendUserName FROM friendships WHERE instigatorUsername = :user AND accepted =1) UNION (SELECT instigatorUsername FROM friendships WHERE newFriendUserName = :user AND accepted =1) )
 GROUP BY movies.movieID;";
@@ -29,18 +42,18 @@ GROUP BY movies.movieID;";
 	$stmt->bindParam(":user", $_SESSION["username"]);
 		
 	$stmt->execute();
+		}
 	
 	
 	
 	
-	
- } } else {
+   else {
 	 $sql = "SELECT * FROM movies ORDER BY movieTitle ASC;";
 	$stmt = $pdo->prepare($sql); 
 	
 	$stmt->execute();
 	 
- }
+	} }
 	
 	
 	echo '<div class="container">';
@@ -51,6 +64,7 @@ GROUP BY movies.movieID;";
 	<style>
 		.movie {
 			text-align: center;
+			font-size: 2em;
 			
 		}
 	
@@ -68,7 +82,7 @@ GROUP BY movies.movieID;";
 	<h1 style=text-align:center> <?php 
 	
 	if(isset($_GET["search"])){
-	echo 'Search results for: "'.$test. '"' ;}
+	echo 'Search results for: "'. $test. '"' ;}
 	else {
 		echo "Recommended Movies";
 	}

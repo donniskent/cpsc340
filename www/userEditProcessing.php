@@ -4,7 +4,7 @@
 	// fix XSS everywhere
 	
 	
-	
+	if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	require_once("../config/pdo.php"); 
 	session_start();
 	$user = $_SESSION['username'];
@@ -66,8 +66,13 @@ $sql = 'UPDATE USERS SET bio = :bio WHERE username= :uname ';
 		header("Location: userEdit.php?user=$user");
 		
 	
+	} } 
+	
+	
+	else {
+		
+		header("Location: userEdit.php?user=$user");
+	
 	}
-	
-	
 
 ?>

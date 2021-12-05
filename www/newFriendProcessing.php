@@ -1,4 +1,6 @@
 <?php 
+
+	if ($_SERVER["REQUEST_METHOD"] == "POST") {
 session_start();
 require_once("../config/pdo.php"); 
 		session_regenerate_id(true);
@@ -16,7 +18,11 @@ require_once("../config/pdo.php");
 		unset($_SESSION["pastID"]);
 		header("Location: moviePage.php?id=$movieid");
 		
-		
+	} 
+	
+	else {
+		header("Location: homePage.php);
+	}
 		
 
 

@@ -7,6 +7,8 @@
 //check admin status and logged in status 
 //also, get request for editing the movie 
 //cast added at the admin page 
+	
+
 ?>
 
 
@@ -45,6 +47,13 @@ $id = $_GET["id"];
 	$stmt->execute();
 	
 		$row = $stmt->fetch(PDO::FETCH_ASSOC);
+		if($row == false) {
+			header("Location: homePage.php");
+		}
+		
+		
+		
+		
 		$title =  $row["movieTitle"];
 		$releaseDate = $row["releaseYear"];
 		$director = $row["directorID"];
@@ -96,6 +105,26 @@ $id = $_GET["id"];
 		</div>    
         <br>
         <div>
+	<h2> Cast: </h2>
+		 <h3><?php 
+		$sql = "SELECT actorName, Actors.actorID, appearances.ActorID, movieID FROM Appearances, Actors
+		WHERE movieID = :id AND appearances.actorID = Actors.actorID;";
+	
+	$stmt = $pdo->prepare($sql); 
+	$stmt->bindParam(':id', $_GET["id"]);
+	$stmt->execute();
+	
+		
+		foreach($stmt as $row){
+		echo $row["actorName"]. "<br>";
+		}
+		
+		
+		
+		?></h3>
+		
+		
+		
 	<?php 
 	if(isset($_SESSION["username"])) {
 	
@@ -160,7 +189,7 @@ $id = $_GET["id"];
 		
 		
 		
-		$sql = "SELECT * FROM Comments 
+		$sql = "SELECT * FROM Comments
 		WHERE movieId = :id ORDER BY submittedDate DESC LIMIT 10;";
 	$stmt = $pdo->prepare($sql); 
 	$stmt->bindParam(':id',$id);
@@ -183,13 +212,39 @@ $id = $_GET["id"];
 		
 	
 	
-	
+		
 		$newFriend = $row["username"];
+		$current = $row["commentID"];
+		
+		
+	
+		
+		
+		
+		
+		
+		
 		
 		
 		echo makeUserLink($row["username"]). " ";
 		echo "  ". $row["submittedDate"]. " ";
-		if($exists == false && $row["username"] != $_SESSION["username"] ) {
+		//see if the current user has liked the comment, 
+		//if not, like button. 
+		$sql ="SELECT * FROM Likes 
+			WHERE commentID = :comment AND username = :name;";
+			$stmt3 = $pdo->prepare($sql); 
+			$stmt3->bindParam(':comment',$current);
+			$stmt3->bindParam(':name',$_SESSION["username"]);
+			$stmt3->execute();
+			$result = $stmt3->fetch(PDO::FETCH_ASSOC);
+			if($result == false && isset($_SESSION["username"])) 
+			{
+				$_SESSION["pastID"] = $_GET["id"]; 
+				echo "<button name=testing formaction='likeProcessing.php' value=$current> Like </button>";
+			}
+			
+			
+		if($exists == false && $row["username"] != $_SESSION["username"]  && isset($_SESSION["username"])) {
 			$_SESSION["pastID"] = $_GET["id"];
 			echo "<button name='newFriend' value='$newFriend'>friend</button> <br>";
 		}
@@ -198,7 +253,14 @@ $id = $_GET["id"];
 		}
 		
 		echo "    ". htmlentities($row["commentMessage"]). " <br> " ;
-		
+		$sql = "SELECT COUNT(*) AS numLikes FROM Likes 
+			WHERE commentID = :id";
+	
+		$stmt = $pdo->prepare($sql); 
+		$stmt->bindParam(':id',$current);
+		$stmt->execute();
+		$bb = $stmt->fetch(PDO::FETCH_ASSOC);
+		echo "Likes: " . $bb["numLikes"]. "<br>";
 	
 	
 	
@@ -259,26 +321,3 @@ $id = $_GET["id"];
 </html>
 
 
-<script>
-
-function friend(button) {
-	alert(button.value);
-	//go make the friend request, then update the comment section
-	
-
-}
-function acceptFriend(button) {
-	alert(button.value);
-	//UPDATE the friendrequest, then update the comment section
-
-
-}
-
-function like() {
-	alert(2);
-	//go make the friend request, then remove the button 
-	
-
-}
-
-</script>

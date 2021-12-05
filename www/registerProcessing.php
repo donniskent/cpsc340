@@ -119,7 +119,7 @@ if (count($errors) == 0) {
 	// start a session, reroute to the home page 
 	session_start();
 	session_regenerate_id(true);
-	$_SESSION["username"] = $firstname;
+	$_SESSION["username"] = $username;
 	header('Location: homepage.php');
 
 }

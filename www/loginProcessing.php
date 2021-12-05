@@ -46,12 +46,23 @@ $password = htmlentities($_POST["pword"]);
 		}
 	}
 	
+	if (empty($username)) {
+	array_push($errors, "Must enter a username");
+	
+	}
+	
+	
+	//if row is false, no values exist, so the 
+	else if($row == false && !empty($username)) {
+		
+		array_push($errors, "Username does not exist.");
+		$username= "";
+	}
 	
 	
 	
 	
-	
-if (empty($password)) {
+else if (empty($password)) {
 	array_push($errors, "Must enter a password");
 }
 	// need to unencrypt pword and compare it to input
@@ -76,18 +87,7 @@ if (empty($password)) {
 	
 	
 	
-	if (empty($username)) {
-	array_push($errors, "Must enter a username");
 	
-	}
-	
-	
-	//if row is false, no values exist, so the 
-	else if($row == false && !empty($username)) {
-		
-		array_push($errors, "Username does not exist.");
-		$username= "";
-	}
 
 
 

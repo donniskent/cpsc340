@@ -1,80 +1,97 @@
+
+
+
 <?php session_start();
 	  session_regenerate_id(true); 
-	   require_once("../config/loginAuth.php");
-	  
+	  require_once("../config/loginAuth.php");
+	  require_once("../config/base.php");
 	  ?>
-<html>
-<body> 
-	<style> 
-
-.errorMessage {
-	color: red;
+<style> 
+body {
+	background-color: #f8f8f8;
 }
-
-
 </style>
 
-  
-<h1>  User Registration
-     </h1>
-<form method= "POST" action="registerProcessing.php">
-<label for="fname">First Name:</label>
-<br>
-<input name="fname" value=<?php if(isset($_SESSION["firstname"])){echo $_SESSION["firstname"];}?>>
-<br>
-<label for="lname">Last Name:</label>
-<br>
-<input name="lname" value=<?php if(isset($_SESSION["lastname"])){echo $_SESSION["lastname"];}?>>
-<br>
 
-<label for="email"> Email</label>
-<!--First, check if email is of proper format 
-Check error: 
-1. See if the email is already taken by a user in the DB 
--->
-<br>
-<input name="email" value=<?php if(isset($_SESSION["email"])){echo $_SESSION["email"];}?>>
-<br>
-<label for="uname">User Name:</label>
-<br>
-<input type="text" name="uname">
-<!--Check if the username is already stored in the DB, prompt user if taken -->
+  <div class="container py-3 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100 ">
+      <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+        <div class="card shadow-2-strong mb-4" style="border-radius: 1rem;">
+          <div class="card-body p-5 text-center">
 
-<br>
-<label for="pword1">Password:</label>
-<br>
-<input type="password" name="pword1">
-<!--Returns an error if the password doesnt conform to standards
-     Passoword should have: a capital, a character, a number, etc - talk with customer about this business/app rule -->
-<br>
-<label for="pword2"> Re-enter Password:</label>
-<br>
-<input type="password" name="pword2">
-<!--Returns an error if the passwords do not match-->
-<br>
-<br>
-<button>Create Account</button>
-<?php if (isset($_SESSION["errors"])) {
+            <h3 class="mb-1">Create Your Free Account</h3>
+			<form action="registerProcessing.php" method="POST">
+            
+			<div class="form-outline mb-3">
+              <input name="fname" class="form-control form-control-lg"value=<?php if(isset($_SESSION["firstname"])){echo $_SESSION["firstname"];}?> >
+              <label class="form-label" for="typeEmailX-2">First Name</label>
+            </div>
+			<div class="form-outline mb-3">
+              <input name="lname" class="form-control form-control-lg" value=<?php if(isset($_SESSION["lastname"])){echo $_SESSION["lastname"];}?>>
+              <label class="form-label" for="lname">Last Name</label>
+            </div>
+			<div class="form-outline mb-3">
+              <input name="uname" class="form-control form-control-lg" value=<?php if(isset($_SESSION["username"])){echo $_SESSION["username"];}?>>
+              <label class="form-label" for="uname">Username</label>
+            </div>
+			<div class="form-outline mb-3">
+              <input name="email" class="form-control form-control-lg" value=<?php if(isset($_SESSION["email"])){echo $_SESSION["email"];}?>>
+              <label class="form-label" for="email">Email</label>
+            </div>
+            <div class="form-outline mb-3">
+              <input type="password" name="pword1" class="form-control form-control-lg" >
+              <label class="form-label" for="pword1">Password</label>
+            </div>
+			<div class="form-outline">
+              <input type="password" name="pword2" class="form-control form-control-lg" >
+              <label class="form-label" for="pword2">Confirm Password</label>
+            </div>
+			
+            <!-- Checkbox -->
+           
+			<div style="color: red;"> 
+			<?php if (isset($_SESSION["errors"])) {
 echo "<br>";
 foreach ($_SESSION["errors"] as $error) {
 echo "<br> <div class=\"errorMessage\">".$error . " </div> <br>" ;}
 	
 	session_unset();
 	session_destroy();
-}
+}?>
+			</div>
+
+
+            </div>
+			
+            <button class="btn btn-primary btn-lg btn-block mx-5 mb-4" type="submit">Sign Up</button>
+	
+	</form>
+	
+	<div style="text-align: center; color: red">
+	<?php if (isset($_SESSION["errors"])) {
+
+foreach ($_SESSION["errors"] as $error) {
+echo "<br> " .$error . " <br>" ;}
+	
+	session_unset();
+	session_destroy();
+	}
 
 ?>
+</div>
+	
+	
+	
+	<div style="text-align:center">
+           <h3>Dont have an account? Make one <a href="registration.php">here</a> </h3>
+	</div>
+          
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-<!--Button will reroute to the home page if succesful
-     Otherwise will refresh page and give the proper error message-->
-<h3>Already have an account? Sign in <a href="login.php">here</a> </h3>
-<!--Href will be the path to the sign in page -->
-</form>
 
-
-</body>
-
-
-</html> 
 
 

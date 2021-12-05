@@ -25,7 +25,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 	
 	
 	
-	
+	try {
 	$sql = "INSERT INTO Appearances (movieID, actorID)
 			VALUES(:movie, :actor)"; 
 	
@@ -35,10 +35,22 @@ if($_SERVER["REQUEST_METHOD"] == "POST") {
 	$stmt->bindParam(':movie',$movie);
 	$stmt->bindParam(':actor',$actor);
 	$stmt->execute();
-
+	} 
+	
+	catch (Exception $e) {
+		$error = "Cast member already exists.";
+	}
 
 	
 	
+	if(isset($error)) {
+		
+		header("Location: admin.php?error=$error");
+		
+	}
+	else{
+	header("Location: admin.php");
+	}
 	
 	
 

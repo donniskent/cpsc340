@@ -13,7 +13,7 @@ require_once("../config/base.php");
 //goal: finish the edit page
 // 
 
-$sql = 'SELECT * FROM Users WHERE username=:uname';
+$sql = 'SELECT bio FROM Users WHERE username=:uname';
 	$stmt = $pdo->prepare($sql); 
 	$stmt->bindParam(':uname',$_GET["user"]);
 	$stmt->execute();
@@ -39,7 +39,7 @@ $sql = 'SELECT * FROM Users WHERE username=:uname';
 	
 	
 	<button type="submit"> Make Changes </button>
-	<button type="submit" formaction="user.php?user=<?php echo $user?>"> Discard Changes </button>
+	<button type="submit" formaction="user.php?user=<?php echo $user?>"> Back to Your Page </button>
 
 </form>
 

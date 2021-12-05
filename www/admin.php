@@ -24,6 +24,14 @@ session_regenerate_id(true);
 <body> 
 <h1> Create New Movie </h1>
  
+ 
+ <?php if (isset($_GET["error"])) {
+		echo "Error Creating entry: " .$_GET["error"];
+	} ?>
+	
+ 
+ 
+ 
 <form method="Post"  enctype="multipart/form-data" action="adminProcessing.php"> 
             <label for="title">
                 Title
@@ -184,7 +192,120 @@ echo "<br>" . $error;}
 
 ?>
 
+	<form method="Post" action="processing.php"> 
+	<h2> Add a new Actor/Actress </h2>
+	<label for="actorName"> Name </label>
+	<input name="actorName">
+	<button> Submit </button>
+	
+	
+	</form> 
 
+<form method="Post" action="processing.php"> 
+	<h2> Add a new Director </h2>
+	<label for="director"> Name </label>
+	<input name="director">
+	<button> Submit </button>
+	
+	
+	</form> 
+	<form method="Post" action="processing.php"> 
+	<h2> Add a new Genre </h2>
+	
+	<input name="genre">
+	<button> Submit </button>
+	</form> 
+	
+	
+	<form method="Post" action="processing.php"> 
+	<h2> Add a new Studio </h2>
+	<label for="studio"> Name </label>
+	<input name="studio">
+	<button> Submit </button>
+	
+	</form> 
+
+
+
+
+
+
+
+
+
+
+
+
+<h2> Add a cast member to a Movie </h2>
+<form action="addCastProcessing.php" method="Post"> 
+ <label for="movies">
+                Movie
+            </label>
+            <select name="movies">
+            <?php 
+			
+		$sql = "SELECT * FROM movies"; 
+	
+		$stmt = $pdo->prepare($sql); 
+		//$stmt->bindParam(":table",$table);
+		$stmt->execute();
+		
+		
+		foreach ($stmt as $row){
+		
+		echo "<option value='".htmlentities($row["movieID"])."' > " . htmlentities($row["movieTitle"]) . " </option>";
+		
+		
+		}
+		
+	
+	
+	
+			?>
+			
+			
+			
+			
+			
+			
+			</select>
+			<br>
+			<label for="actors">Actor</label>
+			<select name="actors">
+            <?php 
+			
+		$sql = "SELECT * FROM actors"; 
+	
+		$stmt = $pdo->prepare($sql); 
+		//$stmt->bindParam(":table",$table);
+		$stmt->execute();
+		
+		
+		foreach ($stmt as $row){
+		
+		echo "<option value='".htmlentities($row["actorID"])."' > " . htmlentities($row["actorName"]) . " </option>";
+		
+		
+		}
+		
+	
+	
+	
+			?>
+			
+			
+			
+			
+			
+			
+			</select>
+			
+			<button> Submit </button>
+ 
+
+
+
+</form> 
 
 
 

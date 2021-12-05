@@ -21,9 +21,11 @@
 <style>
 .what ul {
   list-style-type: none;
+  
  
 }
 
+	body {background: #f8f8f8}
 
 </style>
 <!--Use session info and php to decide what buttons are getting shown on the page -->
@@ -45,7 +47,7 @@
 
 
 
-<h1 style="text-align: center;">Movie Rating</h1>
+<h1 style="text-align: center;">Home</h1>
 
 
 
@@ -65,34 +67,7 @@
 
 <br> 
 
-<form>
-    <label for="search-friends">
-        Search for Friends
-    </label>
-    <input name="search-friends">
-    <button name="submit-search-friends">GO!</button>
-</form> 
-<!--Loads all the results of the search in the user lookup page-->
 
-<br>
-<div id="content">
-<form>
-    <label for="search-by">
-        Search by:
-    </label>
-    <select>
-        <option>Genre</option>
-        <option>Studio</option>
-        <option>Director</option>
-        <option>Actor</option>
-    </select>
-    
-    <input name="search-by">
-    <button name="submit-search-by">GO!</button>
-</form> 
-<!--Pick a table to query, load results based on input. Accepts all input
-if no match: will be stated on next page-->
-</div>
 
 
 
